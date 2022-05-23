@@ -27,7 +27,8 @@ function createblog({user}) {
                     body,
                     imageUrl:url,
                     postedBy:user.uid,
-                    createdAt:serverTimestamp()
+                    createdAt:serverTimestamp(),
+                    comments:[]
                 }).then((result)=>{
                     // console.log("Document written with ID: ", user.id);
                     M.toast({html: 'Blog Created',classes:"green"}) 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { db } from '../../firebase';
 import { doc, setDoc } from "firebase/firestore";
@@ -6,56 +6,27 @@ import { useRouter } from 'next/router'
 import { addDoc } from "firebase/firestore"; 
 import {  getDocs, onSnapshot, startAfter } from "firebase/firestore"; 
 import { collection, query, where } from "firebase/firestore";
+import {  updateDoc } from "firebase/firestore";
  export default function BlogePage(props) {
     // console.log(props.blogdata)
+    const [blogData , SetBlogData]=useState(props.blogdata);
+
     const [myComment,setMyComment] = useState('')
     const router = useRouter()
     const {blogid}=router.query;
-
-//   console.log(pid.blogid)
-
+    console.log(blogData)
     const makeCommet = async ()=>{
+       console.log(blogData)
 
            console.log(blogid)
-        // const docRef = doc(db, 'blogs', pid);
-        alert('hello')
-        if(blogid){
-            alert('hello')
-            alert(blogid)
-            const citiesRef = collection(db, 'blogs');
-            // const docRef=collection(db,'blogs',blogid);
-            const cref=collection(citiesRef, blogid)
-             const data = doc(db, "blogs", blogid, "comment")
-            // console.log(docRef)
-            // const docref= new setDoc(doc(cref, 'comment'), {
-            //     comment: myComment,
-            //     type: 'bridge',
-            //     id:'bgid'
-            // })
-        //   const docRef=  await addDoc(collection(db, "blogs",blogid), {
-        //         comment: myComment,
-        //         name: "laxman",
-               
-        //       });
-
-    // const createDoc = await setDoc(docRef, {comment : myComment});
-
-        }
-        // const bookRef = collection(db ,"blogs")  
-         
-        // db.collection("blogs").collection(pid.blogid).document({comment:'sdds'})
-        // const createDoc = await setDoc(docRef, {comment : myComment});
-        // const q= collection(db,'blogs').doc(pid).collection('comments').add({
-        //     text:myComment,
-        //          name:props.user.displayName
-        // })
-       
-        // await db.collection('blogs').doc(blogid).collection('comments').add({
-        //      text:myComment,
-        //      name:user.displayName
-        //  })
-        // const commentQuery = await db.collection('blogs').doc(blogid).collection('comments').get()
-        // setAllComments(commentQuery.docs.map(docSnap=>docSnap.data()))
+           const frankDocRef = doc(db, "blogs", blogid);
+        const res=   await updateDoc(frankDocRef, {
+      
+           comments:[...blogData.comments,  {  comment:myComment, author:props.user.displayName ,id:blogData.comments.length+1}]
+          
+        });
+        console.log(res)
+ 
 
      }
     // const [blog, setBlog] = useState({})
@@ -86,9 +57,9 @@ import { collection, query, where } from "firebase/firestore";
             <hr />
             <div className="left-align">
 
-                {/* {allCommentsBlog.map(item=>{
-                    return <h6 key={item.name}><span>{item.name}</span> {item.text}</h6>
-                })} */}
+                {blogData.comments.map(item=>{
+                    return <h6 key={item.name}><span>{item.author}</span> {item.comment}</h6>
+                })}
             </div>
 
             <style jsx global>
