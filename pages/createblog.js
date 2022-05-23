@@ -7,12 +7,14 @@ import {storage,db} from '../firebase'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 import { serverTimestamp } from 'firebase/firestore';
+import { useRouter } from 'next/router'
 
 function createblog({user}) {
     const [title,setTitle] = useState('')
     const [body,setBody] = useState('')
     const [image,setImage] = useState(null)
     const [url,setUrl] = useState('')
+    const router = useRouter()
 
 
 
@@ -29,6 +31,8 @@ function createblog({user}) {
                 }).then((result)=>{
                     // console.log("Document written with ID: ", user.id);
                     M.toast({html: 'Blog Created',classes:"green"}) 
+                    router.push("/")
+
                 }).catch((err)=>{
                     // console.error("Error adding document: ", err);
                     M.toast({html:'error creating blog',classes:"red"}) 
